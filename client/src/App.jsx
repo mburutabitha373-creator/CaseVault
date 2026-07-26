@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Navigate, Routes, Route, useLocation } from "react-router-dom";
 
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -18,6 +18,15 @@ function App() {
     location.pathname === "/login" ||
     location.pathname === "/register";
 
+  const isAuthenticated = () => {
+    const storedUser = localStorage.getItem("casevault_user");
+    return Boolean(storedUser && storedUser !== "null");
+  };
+
+  const ProtectedRoute = ({ children }) => {
+    return isAuthenticated() ? children : <Navigate to="/login" replace />;
+  };
+
   return (
     <>
       {!isAuthPage && <Navbar />}
@@ -26,12 +35,12 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/cases" element={<Cases />} />
-        <Route path="/evidence" element={<Evidence />} />
-        <Route path="/add-case" element={<AddCase />} />
-        <Route path="/add-evidence" element={<AddEvidence />} />
-        <Route path="/edit-case/:id" element={<EditCase />} />
+        <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/cases" element={<ProtectedRoute><Cases /></ProtectedRoute>} />
+        <Route path="/evidence" element={<ProtectedRoute><Evidence /></ProtectedRoute>} />
+        <Route path="/add-case" element={<ProtectedRoute><AddCase /></ProtectedRoute>} />
+        <Route path="/add-evidence" element={<ProtectedRoute><AddEvidence /></ProtectedRoute>} />
+        <Route path="/edit-case/:id" element={<ProtectedRoute><EditCase /></ProtectedRoute>} />
       </Routes>
     </>
   );
