@@ -7,4 +7,15 @@ const api = axios.create({
   },
 });
 
+api.interceptors.request.use((config) => {
+  if (!config.url) return config;
+
+  const normalizedUrl = config.url.startsWith("/api")
+    ? config.url.replace(/^\/api/, "")
+    : config.url;
+
+  config.url = normalizedUrl;
+  return config;
+});
+
 export default api;

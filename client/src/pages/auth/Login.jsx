@@ -27,10 +27,10 @@ function Login() {
     try {
       setLoading(true);
 
-     const response = await api.post("/login", {
-  email: formData.email,
-  password: formData.password,
-});
+      const response = await api.post("/login", {
+        email: formData.email,
+        password: formData.password,
+      });
 
 localStorage.setItem(
   "casevault_user",
