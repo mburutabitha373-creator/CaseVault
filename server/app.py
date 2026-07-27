@@ -5,7 +5,19 @@ from config import db, migrate
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "casevault-dev-secret-key-change-this-later"
-CORS(app)
+CORS(
+    app,
+    resources={r"/*": {"origins": [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://case-vault-fqzbgejvi-tabby4.vercel.app",
+        "https://case-vault-sable.vercel.app",
+        "https://case-vault-git-main-tabby4.vercel.app"
+    ]}},
+    supports_credentials=True,
+    allow_headers=["Content-Type", "Authorization"],
+    methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///casevault.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
